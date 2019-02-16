@@ -6,10 +6,9 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text, View, Alert, AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
-import type { Notification, NotificationOpen } from 'react-native-firebase';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -18,68 +17,118 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-export default class App extends Component {
-    async componentDidMount() {
-        const notificationOpen: NotificationOpen = await firebase.notifications().getInitialNotification();
-        if (notificationOpen) {
-            const action = notificationOpen.action;
-            const notification: Notification = notificationOpen.notification;
-            var seen = [];
-            alert(JSON.stringify(notification.data, function(key, val) {
-                if (val != null && typeof val == "object") {
-                    if (seen.indexOf(val) >= 0) {
-                        return;
-                    }
-                    seen.push(val);
-                }
-                return val;
-            }));
-        }
-        const channel = new firebase.notifications.Android.Channel('test-channel', 'Test Channel', firebase.notifications.Android.Importance.Max)
-                .setDescription('My apps test channel');
+type Props = {};
+export default class App extends Component<Props> {
+  async componentDidMount() {
+    this.checkPermission();
+    this.createNotificationListeners(); //add this line
+  }
 
-// Create the channel
-        firebase.notifications().android.createChannel(channel);
-        this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {
-            // Process your notification as required
-            // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-        });
-        this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
-            // Process your notification as required
-            notification
-                .android.setChannelId('test-channel')
-                .android.setSmallIcon('ic_launcher');
-            firebase.notifications()
-                .displayNotification(notification);
+  componentWillUnmount() {
+    this.notificationListener;
+    this.notificationOpenedListener;
+  }
 
-        });
-        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
-            // Get the action triggered by the notification being opened
-            const action = notificationOpen.action;
-            // Get information about the notification that was opened
-            const notification: Notification = notificationOpen.notification;
-            var seen = [];
-            alert(JSON.stringify(notification.data, function(key, val) {
-                if (val != null && typeof val == "object") {
-                    if (seen.indexOf(val) >= 0) {
-                        return;
-                    }
-                    seen.push(val);
-                }
-                return val;
-            }));
-            firebase.notifications().removeDeliveredNotification(notification.notificationId);
-
-        });
+  //1
+  async checkPermission() {
+    const enabled = await firebase.messaging().hasPermission();
+    if (enabled) {
+      this.getToken();
+    } else {
+      this.requestPermission();
     }
+  }
 
-    componentWillUnmount() {
-        this.notificationDisplayedListener();
-        this.notificationListener();
-        this.notificationOpenedListener();
+  async createNotificationListeners() {
+    /*
+    * Triggered when a particular notification has been received in foreground
+    * */
+    this.notificationListener = firebase.notifications().onNotification((notification) => {
+      const { title, body } = notification;
+      console.log('onNotification:');
+      // this.showAlert(title, body);
+      // alert('message');
+
+      const localNotification = new firebase.notifications.Notification({
+        sound: 'sampleaudio',
+        show_in_foreground: true,
+      })
+        .setNotificationId(notification.notificationId)
+        .setTitle(notification.title)
+        // .setSubtitle(notification.subtitle)
+        .setBody(notification.body)
+        // .setData(notification.data)
+        .android.setChannelId('fcm_default_channel') // e.g. the id you chose above
+        .android.setSmallIcon('@drawable/ic_launcher') // create this icon in Android Studio
+        .android.setColor('#000000') // you can set a color here
+        .android.setPriority(firebase.notifications.Android.Priority.High);
+
+
+      firebase.notifications()
+        .displayNotification(localNotification)
+        .catch(err => console.error(err));
+    });
+
+
+    const channel = new firebase.notifications.Android.Channel('fcm_default_channel', 'Demo app name', firebase.notifications.Android.Importance.High)
+      .setDescription('Demo app description')
+      .setSound('sampleaudio.mp3');
+    firebase.notifications().android.createChannel(channel);
+
+    /*
+    * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
+    * */
+    this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+      const { title, body } = notificationOpen.notification;
+      console.log('onNotificationOpened:');
+      this.showAlert(title, body);
+    });
+
+    /*
+    * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+    * */
+    const notificationOpen = await firebase.notifications().getInitialNotification();
+    if (notificationOpen) {
+      const { title, body } = notificationOpen.notification;
+      console.log('getInitialNotification:');
+      this.showAlert(title, body);
     }
+    /*
+    * Triggered for data only payload in foreground
+    * */
+    this.messageListener = firebase.messaging().onMessage((message) => {
+      //process data message
+      console.log(JSON.stringify(message));
+    });
+  }
 
-render() {
+  //3
+  async getToken() {
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    if (!fcmToken) {
+      fcmToken = await firebase.messaging().getToken();
+      if (fcmToken) {
+        // user has a device token
+        console.log('fcmToken:', fcmToken);
+        await AsyncStorage.setItem('fcmToken', fcmToken);
+      }
+    }
+    console.log('fcmToken:', fcmToken);
+  }
+
+  //2
+  async requestPermission() {
+    try {
+      await firebase.messaging().requestPermission();
+      // User has authorised
+      this.getToken();
+    } catch (error) {
+      // User has rejected permissions
+      console.log('permission rejected');
+    }
+  }
+
+  render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Welcome to React Native!</Text>
