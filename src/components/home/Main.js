@@ -2,24 +2,65 @@ import React, { Component } from 'react';
 import {
     ScrollView,
     Text,
-    View,
-    Button
+    View, Image
 } from 'react-native';
-
+import { Container, Header, Content, Tab, Tabs,
+Left, Right, Title, Body, Button} from 'native-base';
+var user = require('./user.json');
 export default class Main extends Component {
     render() {
         return (
-            <ScrollView style={{padding: 20}}>
-                <Text
-                    style={{fontSize: 27}}>
-                    Welcome
-                </Text>
-                <View style={{margin:20}} />
-                <Button
-                            onPress={this.props.onLogoutPress}
-                            title="Logout"
-                        />
-                </ScrollView>
+          <View style={{width:'100%', height:'100%'}}>
+            <Header>
+          <Left>
+          <Image
+            source={require('../Blood.png')}
+            style={{width: 50, height: 50}}
+          />
+          </Left>
+          <Body>
+            <Title>Blood Pool</Title>
+          </Body>
+          <Right>
+            <Button block rounded info
+                        onPress={this.props.onLogoutPress}
+                    >
+                    <Text>Logout</Text>
+                  </Button>
+          </Right>
+        </Header>
+        <Text style={{ fontWeight: 'bold', fontSize: 18}}>Welcome {user.name} </Text>
+            <Image
+              source={require('../user.png')}
+              style={{width: 150, height: 150, borderRadius: 75, marginLeft: '30%'}}
+            />
+          <Text style={{marginLeft: '30%', fontWeight: 'bold', fontSize: 16}}> Donations made: {user.donationsMade} </Text>
+            <View style={{height: 200, width: '100%', flexDirection: 'row', marginTop: 50}}>
+              <View style={{height: 200, width: '50%'}}>
+                <Image
+                  source={require('../bank.png')}
+                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
+                />
+              <Text style={{ marginLeft: 10}}>Blood Banks Nearby Me</Text>
+              </View>
+              <View style={{height: 200, width: '50%'}}>
+                <Image
+                  source={require('../events.png')}
+                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
+                />
+              <Text style={{ marginLeft: 30}}>Upcoming Events</Text>
+              </View>
+            </View>
+            <View style={{height: 200, width: '100%', flexDirection: 'row', marginTop: 20}}>
+              <View style={{height: 200, width: '50%'}}>
+                <Image
+                  source={require('../urgent.png')}
+                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
+                />
+              <Text style={{ marginLeft: 30}}>Urgent Requirements</Text>
+              </View>
+            </View>
+          </View>
                 )
     }
 }

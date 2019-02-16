@@ -18,7 +18,7 @@ export default class signup extends Component {
     longt: '',
     active: '',
     bgroup: '',
-    addr: ''
+    addr: '',
   }
   onChangeText = (key, val) => {
     this.setState({ [key]: val })
