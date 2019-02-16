@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
 import { View, Text, StyleSheet, Alert, ListView, Image, ScrollView, TouchableOpacity } from 'react-native'
 import {Button } from 'native-base'
+var responsejson = require('./responsejson.json');
+
 export default class Allcharges extends PureComponent {
   static title = 'Last 10 transactions'
   state = {
@@ -22,7 +24,7 @@ export default class Allcharges extends PureComponent {
     return (
       <View style={styles.container}>
         <Button
-          text="Click to get nearest 10 Blood Banks"
+          text="Click to get nearest Blood Banks"
           loading={loading}
           onPress={this.handleCardPayPress}
           {...testID('cardFormButton')}
@@ -66,9 +68,10 @@ class Listcharges extends PureComponent{
           renderRow={(rowData) =>
             <TouchableOpacity onPress={this.GetStatus.bind(this, rowData)} >
             <View style={{borderColor: '#DAFF7F', backgroundColor:'#FFFFFF', padding: 5, paddingTop: 5, paddingLeft: 5}}>
-            <Text> Amount:  <Text style={{color: '#F73131', size: 20}}>{rowData.amount} {rowData.currency}</Text>
+            <Text> Name:  <Text style={{color: '#F73131', size: 20}}>{rowData.name}</Text></Text>
+            <Text> Location:  <Text style={{color: '#F73131', size: 20}}>{rowData.loc} {rowData.distance}</Text>
             </Text>
-            <Text> Transaction id:  {rowData.id} </Text>
+            <Text> Capacity:  {rowData.capacity} </Text>
             </View>
             </TouchableOpacity>
           }

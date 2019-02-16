@@ -1,0 +1,5 @@
+{
+"name":"blood Banks",
+"data":[ {"id":28,"name":"City Blood Bank", "loc": "Great Eastern Rd, Near Vivekanand Ashram, Adarsh Bazar, Raipur, Chhattisgarh 492001", "distance":"1.8 km", "capacity": "5L", "lat": "21.237700", "longt": "81.689720"},
+{"id":11,"name":"Chhattisgarh Blood Bank", "loc": "Agrawal Ramkrishna Care Hospital Premises, Great Eastern Rd, Raipur, Chhattisgarh 492001", "distance":"850m", "capacity": "15L", "lat": "21.236006", "longt": "81.677777"}]
+}
