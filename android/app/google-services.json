@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "814541298740",
+    "firebase_url": "https://bloodpool-2dfd4.firebaseio.com",
+    "project_id": "bloodpool-2dfd4",
+    "storage_bucket": "bloodpool-2dfd4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814541298740:android:08e780dd5d8f3c06",
+        "android_client_info": {
+          "package_name": "com.bloodpool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814541298740-tb0mb8dpqk12c3b3k1nghs8k5ikp7m53.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB33U6LvCWN9uqJhoMiRCLruoOCrqNnsr8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
