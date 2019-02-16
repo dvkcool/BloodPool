@@ -1,5 +1,5 @@
 import React from "react";
-import LoginPage from "./Login";
+import LoginPage from "./LoginIndex";
 import HomePage from "./home/Main";
 import { isSignedIn } from "./auth";
 
@@ -28,10 +28,10 @@ export default class App extends React.Component {
     }
 
     else if(signedIn){
-      return <HomePage onLogoutPress={() => this.setState({signedIn: false})}/>;
+      return <HomePage onLogoutPress={() => this.setState({signedIn: false})} fcm={this.props.fcm}/>;
     }
     else{
-      return <LoginPage onLoginPress={() => this.setState({signedIn: true})}/>;
+      return <LoginPage onLoginPress={() => this.setState({signedIn: true})} fcm={this.props.fcm}/>;
     }
   }
 }

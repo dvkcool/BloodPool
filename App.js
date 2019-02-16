@@ -19,6 +19,9 @@ const instructions = Platform.select({
 
 type Props = {};
 export default class App extends Component<Props> {
+  state ={
+    fcmid: ''
+  }
   async componentDidMount() {
     this.checkPermission();
     this.createNotificationListeners(); //add this line
@@ -131,7 +134,7 @@ export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Main/>
+        <Main fcm={this.state.fcmid}/>
       </View>
     );
   }
