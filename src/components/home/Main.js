@@ -2,119 +2,13 @@ import React, { Component } from 'react';
 import {
     ScrollView,
     Text,
-    View, Image
+    View, Image, TouchableOpacity
 } from 'react-native';
 import { Container, Header, Content, Tab, Tabs,
 Left, Right, Title, Body, Button} from 'native-base';
+
 var user = require('./user.json');
-import bNear from '../bankNearMe/bNear';
-class screenMinor extends Component{
-  render(){
-    if(this.props.screen==0){
-      return(
-        <View>
-
-        <Text style={{ fontWeight: 'bold', fontSize: 18}}>Welcome {user.name} </Text>
-            <Image
-              source={require('../user.png')}
-              style={{width: 150, height: 150, borderRadius: 75, marginLeft: '30%'}}
-            />
-          <Text style={{marginLeft: '30%', fontWeight: 'bold', fontSize: 16}}> Donations made: {user.donationsMade} </Text>
-            <View style={{height: 200, width: '100%', flexDirection: 'row', marginTop: 50}}>
-              <View style={{height: 200, width: '50%'}}>
-                <Image
-                  source={require('../bank.png')}
-                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
-                />
-              <Text style={{ marginLeft: 10}}>Blood Banks Nearby Me</Text>
-              </View>
-              <View style={{height: 200, width: '50%'}}>
-                <Image
-                  source={require('../events.png')}
-                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
-                />
-              <Text style={{ marginLeft: 30}}>Upcoming Events</Text>
-              </View>
-            </View>
-            <View style={{height: 200, width: '100%', flexDirection: 'row', marginTop: 20}}>
-              <View style={{height: 200, width: '50%'}}>
-                <Image
-                  source={require('../urgent.png')}
-                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
-                />
-              <Text style={{ marginLeft: 30}}>Urgent Requirements</Text>
-              </View>
-              <View style={{height: 200, width: '50%'}}>
-                <Image
-                  source={require('../donorcard.png')}
-                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
-                />
-              <Text style={{ marginLeft: 30}}>Donor Card</Text>
-              </View>
-            </View>
-                  </View>
-      );
-    }
-    else if(this.props.screen==1){
-      <bnear setScreen={this.props.SetScreen} />
-    }
-    else{
-      return(
-        <View>
-
-        <Text style={{ fontWeight: 'bold', fontSize: 18}}>Welcome {user.name} </Text>
-            <Image
-              source={require('../user.png')}
-              style={{width: 150, height: 150, borderRadius: 75, marginLeft: '30%'}}
-            />
-          <Text style={{marginLeft: '30%', fontWeight: 'bold', fontSize: 16}}> Donations made: {user.donationsMade} </Text>
-            <View style={{height: 200, width: '100%', flexDirection: 'row', marginTop: 50}}>
-              <View style={{height: 200, width: '50%'}}>
-                <Image
-                  source={require('../bank.png')}
-                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
-                />
-              <Text style={{ marginLeft: 10}}>Blood Banks Nearby Me</Text>
-              </View>
-              <View style={{height: 200, width: '50%'}}>
-                <Image
-                  source={require('../events.png')}
-                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
-                />
-              <Text style={{ marginLeft: 30}}>Upcoming Events</Text>
-              </View>
-            </View>
-            <View style={{height: 200, width: '100%', flexDirection: 'row', marginTop: 20}}>
-              <View style={{height: 200, width: '50%'}}>
-                <Image
-                  source={require('../urgent.png')}
-                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
-                />
-              <Text style={{ marginLeft: 30}}>Urgent Requirements</Text>
-              </View>
-              <View style={{height: 200, width: '50%'}}>
-                <Image
-                  source={require('../donorcard.png')}
-                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
-                />
-              <Text style={{ marginLeft: 30}}>Donor Card</Text>
-              </View>
-            </View>
-                  </View>
-      );
-    }
-
-  }
-}
 export default class Main extends Component {
-  state = {
-    screen: 0
-  }
-  setScreen(value){
-    this.setState({
-      screen: value
-    })
-  }
     render() {
         return (
           <View style={{width:'100%', height:'100%'}}>
@@ -136,7 +30,47 @@ export default class Main extends Component {
                   </Button>
           </Right>
         </Header>
-        <screenMinor screen={this.state.screen} setScreen={this.setScreen}/>
+        <Text style={{ fontWeight: 'bold', fontSize: 18}}>Welcome {user.name} </Text>
+            <Image
+              source={require('../user.png')}
+              style={{width: 150, height: 150, borderRadius: 75, marginLeft: '30%'}}
+            />
+          <Text style={{marginLeft: '30%', fontWeight: 'bold', fontSize: 16}}> Donations made: {user.donationsMade} </Text>
+            <View style={{height: 200, width: '100%', flexDirection: 'row', marginTop: 50}}>
+              <TouchableOpacity style={{height: 200, width: '50%'}} onPress={() => this.props.onBank()}>
+                <View style={{height: 200, width: '50%'}}>
+                  <Image
+                    source={require('../bank.png')}
+                    style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
+                  />
+                <Text style={{ marginLeft: 10}}>Blood Banks Nearby Me</Text>
+                </View>
+              </TouchableOpacity>
+
+              <View style={{height: 200, width: '50%'}}>
+                <Image
+                  source={require('../events.png')}
+                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
+                />
+              <Text style={{ marginLeft: 30}}>Upcoming Events</Text>
+              </View>
+            </View>
+            <View style={{height: 200, width: '100%', flexDirection: 'row', marginTop: 20}}>
+              <View style={{height: 200, width: '50%'}}>
+                <Image
+                  source={require('../urgent.png')}
+                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
+                />
+              <Text style={{ marginLeft: 30}}>Urgent Requirements</Text>
+              </View>
+              <View style={{height: 200, width: '50%'}}>
+                <Image
+                  source={require('../donorcard.png')}
+                  style={{width: 150, height: 150, borderRadius: 75, marginLeft: 10}}
+                />
+              <Text style={{ marginLeft: 30}}>Donor Card</Text>
+              </View>
+            </View>
           </View>
                 )
     }

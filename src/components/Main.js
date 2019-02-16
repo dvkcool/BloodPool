@@ -1,6 +1,6 @@
 import React from "react";
 import LoginPage from "./LoginIndex";
-import HomePage from "./home/Main";
+import HomePage from "./home/MainIndex";
 import { isSignedIn } from "./auth";
 
 export default class App extends React.Component {

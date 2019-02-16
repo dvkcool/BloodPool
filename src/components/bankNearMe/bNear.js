@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react'
-import { View, Text, StyleSheet, Alert, ListView, Image, ScrollView, TouchableOpacity } from 'react-native'
-import {Button } from 'native-base'
+import { View, Text, StyleSheet, Alert, ListView, Image, ScrollView, TouchableOpacity, Button } from 'react-native'
+
 var responsejson = require('./responsejson.json');
 
-export default class Allcharges extends PureComponent {
+export default class BNear extends PureComponent {
   static title = 'Last 10 transactions'
   state = {
     loading: false,
@@ -24,10 +24,8 @@ export default class Allcharges extends PureComponent {
     return (
       <View style={styles.container}>
         <Button
-          text="Click to get nearest Blood Banks"
-          loading={loading}
+          title="Click to get nearest Blood Banks"
           onPress={this.handleCardPayPress}
-          {...testID('cardFormButton')}
         />
      <Listcharges press={this.state.buttonclk} data ={this.state.dataSource}/>
       </View>
@@ -47,26 +45,18 @@ class Listcharges extends PureComponent{
     />
   );
   }
-  GetStatus=(rowData)=>{
-    if(rowData.paid){
-      Alert.alert("Payment successful", "Payment was successful with\n transaction id: "+ rowData.id);
-    }
-    else{
-      Alert.alert("Payment failed", "Your payment failed as \n"+rowData.failure_message );
-    }
-  }
   render(){
     if(this.props.press){
       return(
         <View>
-	<Text> Click on any transaction to get its details, its failure code etc.</Text>
+	<Text> Click on any Blood bank to know more</Text>
         <ScrollView>
             <ListView
           dataSource={this.props.data}
           style={{paddingRight: 10,}}
           renderSeparator= {this.ListViewItemSeparator}
           renderRow={(rowData) =>
-            <TouchableOpacity onPress={this.GetStatus.bind(this, rowData)} >
+            <TouchableOpacity >
             <View style={{borderColor: '#DAFF7F', backgroundColor:'#FFFFFF', padding: 5, paddingTop: 5, paddingLeft: 5}}>
             <Text> Name:  <Text style={{color: '#F73131', size: 20}}>{rowData.name}</Text></Text>
             <Text> Location:  <Text style={{color: '#F73131', size: 20}}>{rowData.loc} {rowData.distance}</Text>
