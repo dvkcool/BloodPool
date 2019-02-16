@@ -10,6 +10,7 @@
     "native-base": "^2.11.0",
     "react": "16.6.3",
     "react-native": "0.58.4",
+    "react-native-chart-kit": "^2.2.1",
     "react-native-elements": "^1.0.0",
     "react-native-firebase": "^5.2.2",
     "react-native-flexi-radio-button": "^0.2.2",
