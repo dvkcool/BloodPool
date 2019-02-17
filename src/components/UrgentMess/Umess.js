@@ -9,63 +9,64 @@ import {
 import {Button, Picker, Item } from 'native-base';
 import firebase from 'react-native-firebase';
 const { width, height } = Dimensions.get('window');
-export default class signup extends Component {
+export default class Umess extends Component {
   state = {
-    phn: '',
-    password: '',
-    fcmid: '',
-    lat: '',
-    longt: '',
-    active: '',
+    phoneNumber: '',
     bgroup: '',
-    addr: '',
-    age: '',
-    name: ''
+    Location: ''
   }
   onChangeText = (key, val) => {
     this.setState({ [key]: val })
   }
-  findCoordinates = async () => {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        console.log(position);
-        this.setState({
-                  lat: position.coords.latitude,
-                  longt: position.coords.longitude,
-                  error: null,
-        });
+  sendMessages = async (bgroup) => {
         try {
-          fetch('https://us-central1-joined-284fe.cloudfunctions.net/testingadduser', {
-        method: 'POST',
+          fetch('https://us-central1-joined-284fe.cloudfunctions.net/getfcmtoken', {
+        method: 'GET',
         headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-        name: this.state.name,
-        phoneNumber: this.state.phn,
-        password: this.state.password,
-        fcmId: this.state.fcmid,
-        latitude: this.state.lat,
-        longitude: this.state.longt,
-        active: this.state.active,
-        bloodGroup: this.state.bgroup,
-        address: this.state.addr,
-        age: this.state.age
-        }),
-        }).then((response) => {
-          console.log(response);
-          this.props.onLoginPress();
+        }).then((response) => response.json())
+        .then((responseJson) => {
+          for(var i = 0; i < responseJson.length; i++) {
+            var obj = responseJson[i];
+            if(obj.bloodgroup == bgroup){
+              try {
+                fetch('https://fcm.googleapis.com/fcm/send', {
+              method: 'POST',
+              headers: {
+              'Authorization':'AAAAvaZx3DQ:APA91bEd6B13TbBTC9voXulF0R7PWGDQdAh8Kn3Rr81snt7ifhqiW0HJYFpZxi8TcM4PvjeDX6MtpztY214n1m-WPBW06phnQK67tQY76iSRtXhxRkb0OQNyZUozTNTYd2q5nvi2dEQ4',
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                "to" : obj.tokenId,
+               "data" : {
+                  "message" : "Urgent Message",
+                  "title" : "This is my data title",
+                  "data_type": "direct_message"
+              }
+              }),
+              }).then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.error(error);
+              })
+              } catch (err) {
+                console.log('error signing up: ', err)
+              }
+            }
+        }
+
+
         })
         .catch((error) => {
           console.error(error);
-        })
+        });
         } catch (err) {
           console.log('error signing up: ', err)
         }
-      },
-      error => Alert.alert(error.message)
-    );
   };
   signUp = async (onLoginPress) => {
     const {phn, password , lat, longt, active, bgroup, addr } = this.state;
@@ -73,16 +74,6 @@ export default class signup extends Component {
     this.setState({fcmid: fcm});
     await this.findCoordinates();
   }
-  onValueChange2(value: string) {
-  this.setState({
-    act: value
-  });
-}
-onValueChange3(value: string) {
-this.setState({
-  bgroup: value
-});
-}
 
     render() {
         return (
@@ -94,20 +85,7 @@ this.setState({
               }
              source={require('../wallpaper.png')}>
                <View style={{marginLeft: 50, marginTop: 50}}>
-                 <TextInput
-                   placeholder='Name'
-                   autoCapitalize="none"
-                   placeholderTextColor='white'
-                   onChangeText={val => this.onChangeText('name', val)}
-                 />
-                 <TextInput
-                   placeholder='Age'
-                   autoCapitalize="none"
-                   placeholderTextColor='white'
-                  keyboardType={'phone-pad'}
-                  maxLength = {3}
-                   onChangeText={val => this.onChangeText('age', val)}
-                 />
+
                <TextInput
                  placeholder='Mobile number'
                  autoCapitalize="none"

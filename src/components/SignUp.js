@@ -30,34 +30,7 @@ export default class SignUp extends React.Component {
                   lat: position.coords.latitude,
                   longt: position.coords.longitude,
                   error: null,
-        });
-
-
-          fetch('https://us-central1-joined-284fe.cloudfunctions.net/testingadduser', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        phoneNumber: this.state.phn,
-        password: this.state.password,
-        fcmid: this.state.fcmid,
-        lat: this.state.lat,
-        longt: this.state.longt,
-        act: this.state.active,
-        bgroup: this.state.bgroup,
-        addr: this.state.addr
-      }),
-    }).then((response) => {
-          console.log(response);
         })
-        .catch((error) => {
-          console.error(error);
-    });
-        } catch (err) {
-          console.log('error signing up: ', err)
-        }
       },
       error => Alert.alert(error.message)
     );
