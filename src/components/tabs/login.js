@@ -45,6 +45,7 @@ export default class login extends Component {
         })
         .catch((error) => {
           console.error(error);
+          Alert.alert("Invalid login");
         });
         } catch (err) {
           console.log('error signing up: ', err)

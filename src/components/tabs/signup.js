@@ -4,7 +4,7 @@ import {
     ScrollView,
     TextInput,
      Dimensions, PixelRatio,
-    ImageBackground, Text, AsyncStorage
+    ImageBackground, Text, AsyncStorage, Alert
 } from 'react-native';
 import {Button, Picker, Item } from 'native-base';
 import firebase from 'react-native-firebase';
@@ -67,11 +67,40 @@ export default class signup extends Component {
       error => Alert.alert(error.message)
     );
   };
+  is_numeric(val){
+    return val && /^-?\d+(\.\d+)?$/.test(val + '');
+  }
   signUp = async (onLoginPress) => {
-    const {phn, password , lat, longt, active, bgroup, addr } = this.state;
-    const fcm = await AsyncStorage.getItem('fcmToken');
-    this.setState({fcmid: fcm});
-    await this.findCoordinates();
+    const {name, phn, password , lat, longt, active, bgroup, addr } = this.state;
+    if(phn==''){
+      Alert.alert("Please enter valid phone Number");
+    }
+    else if(password ==''){
+      Alert.alert("Please enter valid password");
+    }
+    else if(active==''){
+        Alert.alert("Please choose your willingness");
+    }
+    else if(bgroup==''){
+      Alert.alert("Please select a blood group");
+    }
+    else if(addr==''){
+      Alert.alert("Please enter your address");
+    }
+    else if(name==''){
+      Alert.alert("Please enter your name");
+    }
+    else if(is_numeric(name)){
+      Alert.alert("Please enter valid name");
+    }
+    else{
+      const fcm = await AsyncStorage.getItem('fcmToken');
+      this.setState({fcmid: fcm});
+      await this.findCoordinates();
+    }
+
+
+
   }
   onValueChange2(value: string) {
   this.setState({
