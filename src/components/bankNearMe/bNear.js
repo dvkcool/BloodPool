@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { View, Text, StyleSheet, Alert, ListView, Image, ScrollView, TouchableOpacity, Button } from 'react-native'
-
+import getDirections from 'react-native-google-maps-directions'
 var responsejson = require('./responsejson.json');
 
 export default class BNear extends PureComponent {
@@ -34,6 +34,42 @@ export default class BNear extends PureComponent {
 }
 
 class Listcharges extends PureComponent{
+  findCoordinates = async (rowData) => {
+    console.log(rowData);
+    var stlat= '';
+    var stlongt= '';
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        console.log(position);
+                  stlat= position.coords.latitude;
+                  stlongt=  position.coords.longitude;
+                  const data = {
+                     source: {
+                      latitude: stlat,
+                      longitude: stlongt,
+                    },
+                    destination: {
+                      latitude: rowData.lat,
+                      longitude: rowData.longt
+                    },
+                    params: [
+                      {
+                        key: "travelmode",
+                        value: "driving"        // may be "walking", "bicycling" or "transit" as well
+                      },
+                      {
+                        key: "dir_action",
+                        value: "navigate"       // this instantly initializes navigation using the given travel mode
+                      }
+                    ]
+                  }
+                  console.log(data);
+                  getDirections(data)
+
+      },
+      error => Alert.alert(error.message)
+    );
+  };
   ListViewItemSeparator = () => {
   return (
     <View
@@ -56,7 +92,7 @@ class Listcharges extends PureComponent{
           style={{paddingRight: 10,}}
           renderSeparator= {this.ListViewItemSeparator}
           renderRow={(rowData) =>
-            <TouchableOpacity >
+            <TouchableOpacity onPress={() => this.findCoordinates(rowData)}>
             <View style={{borderColor: '#DAFF7F', backgroundColor:'#FFFFFF', padding: 5, paddingTop: 5, paddingLeft: 5}}>
             <View><Text> Name:  </Text></View><View><Text style={{color: '#F73131', size: 20}}>{rowData.name}</Text></View>
             <View><Text> Location:  </Text></View><View><Text style={{color: '#F73131', size: 20}}>{rowData.loc} {rowData.distance}</Text></View>
