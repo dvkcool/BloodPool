@@ -93,7 +93,9 @@ this.setState({
               }
               }
              source={require('../wallpaper.png')}>
-               <View style={{marginLeft: 50, marginTop: 50}}>
+             <ScrollView>
+
+               <View style={{marginLeft: 50, marginTop: 50, paddingBottom: 50}}>
                  <TextInput
                    placeholder='Name'
                    autoCapitalize="none"
@@ -165,6 +167,7 @@ this.setState({
                <Text>Submit</Text>
                </Button>
                </View>
+               </ScrollView>
                </ImageBackground>
             )
     }

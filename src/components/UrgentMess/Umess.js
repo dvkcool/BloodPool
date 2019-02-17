@@ -4,7 +4,7 @@ import {
     ScrollView,
     TextInput,
      Dimensions, PixelRatio,
-    ImageBackground, Text, AsyncStorage
+    ImageBackground, Text, AsyncStorage, Alert
 } from 'react-native';
 import {Button, Picker, Item } from 'native-base';
 import firebase from 'react-native-firebase';
@@ -18,7 +18,7 @@ export default class Umess extends Component {
   onChangeText = (key, val) => {
     this.setState({ [key]: val })
   }
-  sendMessages = async (bgroup) => {
+  sendMessages = async () => {
         try {
           fetch('https://us-central1-joined-284fe.cloudfunctions.net/getfcmtoken', {
         method: 'GET',
@@ -30,25 +30,24 @@ export default class Umess extends Component {
         .then((responseJson) => {
           for(var i = 0; i < responseJson.length; i++) {
             var obj = responseJson[i];
-            if(obj.bloodgroup == bgroup){
+            console.log(obj);
+            if(obj.bloodgroup === this.state.bgroup){
+              console.log("Yes");
               try {
                 fetch('https://fcm.googleapis.com/fcm/send', {
               method: 'POST',
               headers: {
-              'Authorization':'AAAAvaZx3DQ:APA91bEd6B13TbBTC9voXulF0R7PWGDQdAh8Kn3Rr81snt7ifhqiW0HJYFpZxi8TcM4PvjeDX6MtpztY214n1m-WPBW06phnQK67tQY76iSRtXhxRkb0OQNyZUozTNTYd2q5nvi2dEQ4',
+              'Authorization':'key=AAAAvaZx3DQ:APA91bEd6B13TbBTC9voXulF0R7PWGDQdAh8Kn3Rr81snt7ifhqiW0HJYFpZxi8TcM4PvjeDX6MtpztY214n1m-WPBW06phnQK67tQY76iSRtXhxRkb0OQNyZUozTNTYd2q5nvi2dEQ4',
               'Accept': 'application/json',
               'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                "to" : obj.tokenId,
-               "data" : {
-                  "message" : "Urgent Message",
-                  "title" : "This is my data title",
-                  "data_type": "direct_message"
-              }
-              }),
+                "to":obj.tokenId,
+                "notification":
+                {"title":"urgent Blood requirement","body":this.state.phoneNumber},"priority":"high"}),
               }).then((response) => {
                 console.log(response);
+                Alert.alert("Notification Done");
               })
               .catch((error) => {
                 console.error(error);
@@ -68,12 +67,6 @@ export default class Umess extends Component {
           console.log('error signing up: ', err)
         }
   };
-  signUp = async (onLoginPress) => {
-    const {phn, password , lat, longt, active, bgroup, addr } = this.state;
-    const fcm = await AsyncStorage.getItem('fcmToken');
-    this.setState({fcmid: fcm});
-    await this.findCoordinates();
-  }
 
     render() {
         return (
@@ -92,53 +85,17 @@ export default class Umess extends Component {
                  placeholderTextColor='white'
                 keyboardType={'phone-pad'}
                 maxLength = {10}
-                 onChangeText={val => this.onChangeText('phn', val)}
+                 onChangeText={val => this.onChangeText('phoneNumber', val)}
                />
                <TextInput
-                 placeholder='Password'
-                 secureTextEntry={true}
+                 placeholder='Blood group'
                  autoCapitalize="none"
                  placeholderTextColor='white'
-                 onChangeText={val => this.onChangeText('password', val)}
+                 onChangeText={val => this.onChangeText('bgroup', val)}
                />
-               <Text>Active-Donor</Text>
-               <Picker
-                mode="dropdown"
-                style={{ width: '80%' }}
-                placeholder="Active Donor"
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
-                onValueChange={this.onValueChange2.bind(this)}
-              >
-                <Picker.Item label="Willing Donor" value="Willing" />
-                <Picker.Item label="Not Willing" value="Not" />
-              </Picker>
-              <Text>Blood Group</Text>
-              <Picker
-               mode="dropdown"
-               style={{ width: '80%' }}
-               placeholder="Blood Group"
-               placeholderStyle={{ color: "#bfc6ea" }}
-               placeholderIconColor="#007aff"
-               onValueChange={this.onValueChange3.bind(this)}
-             >
-               <Picker.Item label="AB+ve" value="AB+ve" />
-               <Picker.Item label="A+ve" value="A+ve" />
-               <Picker.Item label="B+ve" value="B+ve" />
-               <Picker.Item label="O+ve" value="O+ve" />
-               <Picker.Item label="AB-ve" value="AB-ve" />
-               <Picker.Item label="A-ve" value="A-ve" />
-               <Picker.Item label="B-ve" value="B-ve" />
-               <Picker.Item label="O-ve" value="O-ve" />
-             </Picker>
-               <TextInput
-                 placeholder='Address'
-                 autoCapitalize="none"
-                 placeholderTextColor='white'
-                 onChangeText={val => this.onChangeText('addr', val)}
-               />
+
                <Button block rounded info
-                 onPress={() => this.signUp()}
+                 onPress={() => this.sendMessages()}
                >
                <Text>Submit</Text>
                </Button>

@@ -56,6 +56,7 @@ export default class Main extends Component {
               </View>
             </View>
             <View style={{height: 200, width: '100%', flexDirection: 'row', marginTop: 20}}>
+              <TouchableOpacity style={{height: 200, width: '50%'}} onPress={() => this.props.onUrgent()}>
               <View style={{height: 200, width: '50%'}}>
                 <Image
                   source={require('../urgent.png')}
@@ -63,6 +64,7 @@ export default class Main extends Component {
                 />
               <Text style={{ marginLeft: 30}}>Urgent Requirements</Text>
               </View>
+            </TouchableOpacity>
               <TouchableOpacity style={{height: 200, width: '50%'}} onPress={() => this.props.onCard()}>
               <View style={{height: 200, width: '50%'}}>
                 <Image

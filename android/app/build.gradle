@@ -104,6 +104,15 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release {
+          storeFile file('mykeystore.keystore')
+          storePassword 'cool1998'
+          keyAlias 'mykeyalias'
+          keyPassword 'cool1998'
+
+        }
+      }
     splits {
         abi {
             reset()
@@ -116,6 +125,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
