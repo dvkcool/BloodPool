@@ -31,15 +31,16 @@ export default class SignUp extends React.Component {
                   longt: position.coords.longitude,
                   error: null,
         });
-        try {
-          fetch('https://us-central1-bloodpool-2dfd4.cloudfunctions.net/adduseree', {
+
+
+          fetch('https://us-central1-joined-284fe.cloudfunctions.net/testingadduser', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        phn: this.state.phn,
+        phoneNumber: this.state.phn,
         password: this.state.password,
         fcmid: this.state.fcmid,
         lat: this.state.lat,
@@ -74,6 +75,13 @@ export default class SignUp extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <TextInput
+          style={styles.input}
+          placeholder='Name'
+          autoCapitalize="none"
+          placeholderTextColor='white'
+          onChangeText={val => this.onChangeText('phn', val)}
+        />
         <TextInput
           style={styles.input}
           placeholder='Mobile number'

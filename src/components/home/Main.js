@@ -63,6 +63,7 @@ export default class Main extends Component {
                 />
               <Text style={{ marginLeft: 30}}>Urgent Requirements</Text>
               </View>
+              <TouchableOpacity style={{height: 200, width: '50%'}} onPress={() => this.props.onCard()}>
               <View style={{height: 200, width: '50%'}}>
                 <Image
                   source={require('../donorcard.png')}
@@ -70,6 +71,8 @@ export default class Main extends Component {
                 />
               <Text style={{ marginLeft: 30}}>Donor Card</Text>
               </View>
+            </TouchableOpacity>
+
             </View>
           </View>
                 )

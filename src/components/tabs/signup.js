@@ -32,6 +32,34 @@ export default class signup extends Component {
                   longt: position.coords.longitude,
                   error: null,
         });
+        try {
+          fetch('https://us-central1-joined-284fe.cloudfunctions.net/testingadduser', {
+        method: 'POST',
+        headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+        name: this.state.name,
+        phoneNumber: this.state.phn,
+        password: this.state.password,
+        fcmid: this.state.fcmid,
+        latitude: this.state.lat,
+        longitude: this.state.longt,
+        active: this.state.active,
+        bloodGroup: this.state.bgroup,
+        address: this.state.addr
+        }),
+        }).then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+        } catch (err) {
+          console.log('error signing up: ', err)
+        }
+
 
       },
       error => Alert.alert(error.message)
