@@ -94,8 +94,8 @@ class Listcharges extends PureComponent{
           renderRow={(rowData) =>
             <TouchableOpacity onPress={() => this.findCoordinates(rowData)}>
             <View style={{borderColor: '#DAFF7F', backgroundColor:'#FFFFFF', padding: 5, paddingTop: 5, paddingLeft: 5}}>
-            <View><Text> Name:  </Text></View><View><Text style={{color: '#F73131', size: 20}}>{rowData.name}</Text></View>
-            <View><Text> Location:  </Text></View><View><Text style={{color: '#F73131', size: 20}}>{rowData.loc} {rowData.distance}</Text></View>
+            <View><Text> Name:  </Text></View><View><Text style={{color: '#F73131'}}>{rowData.name}</Text></View>
+            <View><Text> Location:  </Text></View><View><Text style={{color: '#F73131'}}>{rowData.loc} {rowData.distance}</Text></View>
 
             <Text> Capacity:  {rowData.capacity} </Text>
             </View>
